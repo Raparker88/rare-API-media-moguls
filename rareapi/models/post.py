@@ -1,6 +1,8 @@
+"""Post Model Module"""
 from django.db import models
 
 class Post(models.Model):
+    """Post Model"""
     rareuser = models.ForeignKey("RareUser", on_delete=models.CASCADE)
     category = models.ForeignKey("Category", on_delete=models.CASCADE)
     title = models.CharField(max_length=75)
