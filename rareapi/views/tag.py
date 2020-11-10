@@ -22,6 +22,19 @@ class Tags(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
+    def list(self, request):
+        """Handle GET requests to tags resource
+
+        Returns:
+            Response -- JSON serialized list of tags
+        """
+        tags = Tag.objects.all()
+
+
+        serializer = TagSerializer(
+            tags, many=True, context={'request': request})
+        return Response(serializer.data)
+
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for tags
 
