@@ -1,2 +1,2 @@
 from .tag import Tags
-from .post import Post
+from .post import Posts
