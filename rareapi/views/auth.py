@@ -1,12 +1,12 @@
 import json
+import datetime
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework import status
 from rest_framework.authtoken.models import Token
-from levelupapi.models import Gamer
-import datetime
+from rareapi.models import RareUser
 
 
 @csrf_exempt
@@ -14,7 +14,7 @@ import datetime
 def login_user(request):
     '''Handles the authentication of a user
     Method arguments:
-      request -- The full HTTP request object
+        request -- The full HTTP request object
     '''
 
     req_body = json.loads(request.body.decode())
@@ -30,7 +30,8 @@ def login_user(request):
         # If authentication was successful, respond with their token
         if authenticated_user is not None:
             token = Token.objects.get(user=authenticated_user)
-            data = json.dumps({"valid": True, "token": token.key})
+            rare_user = RareUsers.objects.get(user=authenticated_user)
+            data = json.dumps({"valid": True, "token": token.key, "user_id": rare_user.id})
             return HttpResponse(data, content_type='application/json')
 
         else:
@@ -56,15 +57,14 @@ def register_user(request):
         email=req_body['email'],
         password=req_body['password'],
         first_name=req_body['first_name'],
-        last_name=req_body['last_name']
+        last_name=req_body['last_name'],
+        is_active=True
     )
 
     rareuser = RareUser.objects.create(
         bio=req_body['bio'],
         profile_image_url=req_body['profile_image_url'],
-        # set the created on property to the current date and time
         created_on= datetime.date.today(),
-        active = True,
         user=new_user
     )
 
