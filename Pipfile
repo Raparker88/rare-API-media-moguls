@@ -8,10 +8,8 @@ verify_ssl = true
 [packages]
 django = "*"
 autopep8 = "*"
-pylint = "*"
 djangorestframework = "*"
 django-cors-headers = "*"
-pylint-django = "*"
 
 [requires]
 python_version = "3.8"
