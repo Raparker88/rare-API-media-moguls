@@ -23,6 +23,23 @@ class PostTags(ViewSet):
             posttags, many=True, context={'request': request})
         return Response(serializer.data)
 
+    def create(self, request):
+        """Handle POST operations"""
+
+        post = Post.objects.get(pk=request.data["post_id"])
+        tag = Tag.objects.get(pk=request.data["tag_id"])
+
+        posttag = PostTag()
+        posttag.post_id = post
+        posttag.tag_id = tag
+
+        try: 
+            posttag.save()
+            serializer = PostTagSerializer(posttag, context={'request': request})
+            return Response(serializer.data)
+        except ValidationError as ex:
+            return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+
 class PostTagSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for posttags
     Arguments:
