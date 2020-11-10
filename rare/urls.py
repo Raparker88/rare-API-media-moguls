@@ -5,6 +5,7 @@ from rest_framework import routers
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'tags', Tags, 'tag')
+router.register(r'comments', Comments, 'comment')
 
 urlpatterns = [
     path('', include(router.urls)),

@@ -1,1 +1,2 @@
-from .tag import Tags
+from .tag import 
+from .comment import
