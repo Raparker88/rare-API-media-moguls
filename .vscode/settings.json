@@ -1,0 +1,10 @@
+{
+    "sqltools.connections": [
+        {
+            "previewLimit": 50,
+            "driver": "SQLite",
+            "name": "rare_database",
+            "database": "${workspaceFolder:rare-API-media-moguls}/db.sqlite3"
+        }
+    ]
+}
