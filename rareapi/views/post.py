@@ -2,12 +2,12 @@ from django.http.response import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework import serializers
 from rest_framework.response import Response
-from rareapi.models import Posts, RareUsers
+from rareapi.models import Post, RareUser
 
 class Post(ViewSet):
     def list(self, request):
 
-        posts = Posts.objects.all()
+        posts = Post.objects.all()
 
         user_id = self.request.query_params.get('user_id', None)
         if user_id is not None:
@@ -22,7 +22,7 @@ class Post(ViewSet):
             Response JSON serielized post instance
         """
         try:
-            post = Posts.objects.get(pk=pk)
+            post = Post.objects.get(pk=pk)
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
@@ -32,13 +32,13 @@ class Post(ViewSet):
 """Serializer for RareUser Info in a post"""         
 class PostRareUserSerializer(serializers.ModelSerializer):
     class Meta:
-        model = RareUsers
+        model = RareUser
         fields = ('id', 'bio', 'fullname', 'username')
 
 """Basic Serializer for single post"""
 class PostSerializer(serializers.ModelSerializer):
     user = PostRareUserSerializer(many=False)
     class Meta:
-        model = Posts
+        model = Post
         fields = ('id', 'title', 'publication_date', 'content', 'user', 'category')
         depth = 1
