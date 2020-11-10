@@ -4,7 +4,7 @@ from rest_framework import serializers
 from rest_framework.response import Response
 from rareapi.models import Posts, RareUsers
 
-class PostViewSet(ViewSet):
+class Post(ViewSet):
     def list(self, request):
 
         posts = Posts.objects.all()
