@@ -9,7 +9,7 @@ from rest_framework import status
 from rareapi.models import Comment, RareUser, Post
 
 
-class Comment(ViewSet):
+class Comments(ViewSet):
     """Rare comments"""
 
     def create(self, request):
@@ -48,6 +48,18 @@ class Comment(ViewSet):
             comments, many=True, context={'request': request})
         return Response(serializer.data)
 
+class CommentAuthorSerializer(serializers.ModelSerializer):
+    """JSON serializer for post author's related Django user"""
+    class Meta:
+        model = RareUser
+        fields = ['username']
+
+class PostSerializer(serializers.HyperlinkedModelSerializer):
+    """JSON serializer for post"""
+    class Meta:
+        model = Post
+        fields = ('id')
+
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for comments"""
     author = CommentAuthorSerializer(many=False)
@@ -61,24 +73,4 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         )
         fields = ('id', 'url', 'post', 'author',
                 'content', 'subject', 'created_on')
-
-class CommentAuthorSerializer(serializers.ModelSerializer):
-    """JSON serializer for post author's related Django user"""
-    class Meta:
-        model = User
-        fields = ['username']
-
-class PostAuthorSerializer(serializers.ModelSerializer):
-    """JSON serializer for post author"""
-    author = EventUserSerializer(many=False)
-
-    class Meta:
-        model = RareUser
-        fields = ['author']
-
-class PostSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for post"""
-    class Meta:
-        model = Post
-        fields = ('id')
 # Ready for postman testing once data is loaded

@@ -1,11 +1,14 @@
 from django.conf.urls import include
 from django.urls import path
 from rareapi.views import Tags
+from rareapi.views import Posts
+from rareapi.views import Comments
 from rest_framework import routers
 
 router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'tags', Tags, 'tag')
 router.register(r'comments', Comments, 'comment')
+router.register(r'posts', Posts, 'post')
 
 urlpatterns = [
     path('', include(router.urls)),
