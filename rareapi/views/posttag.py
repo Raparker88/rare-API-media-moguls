@@ -24,4 +24,11 @@ class PostTags(ViewSet):
         return Response(serializer.data)
 
 class PostTagSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for posttags"""
+    """JSON serializer for posttags
+    Arguments:
+        serializer type
+    """
+
+    class Meta:
+        model = PostTag
+        fields = ('id', 'post_id', 'tag_id')
