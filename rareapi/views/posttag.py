@@ -58,12 +58,18 @@ class PostTags(ViewSet):
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
+class TagSerializer(serializers.HyperlinkedModelSerializer):
+    """JSON serializer for tags"""
+    class Meta:
+        model = Tag
+        fields = ('id', 'label')
+
+
 class PostTagSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for posttags
-    Arguments:
-        serializer type
-    """
+    """JSON serializer for posttags"""
+     
+    tag = TagSerializer(many=False)
 
     class Meta:
         model = PostTag
-        fields = ('id', 'post_id', 'tag_id')
+        fields = ('id', 'post_id', 'tag_id', 'tag')
