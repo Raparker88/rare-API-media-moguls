@@ -74,5 +74,5 @@ class PostTagSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = PostTag
-        fields = ('id', 'post_id', 'tag')
+        fields = ('id', 'post_id', 'tag_id', 'tag')
         depth = 1
