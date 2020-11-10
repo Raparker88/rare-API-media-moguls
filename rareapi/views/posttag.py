@@ -1,8 +1,10 @@
 """View module for handling requests about posttags"""
 from django.http import HttpResponseServerError
+from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
+from rest_framework import status
 from rareapi.models import PostTag, Tag, Post
 
 class PostTags(ViewSet):
@@ -14,7 +16,7 @@ class PostTags(ViewSet):
         posttags = PostTag.objects.all()
 
         #filtering posttags by post
-        post = self.request.query_params.get("postId", None)
+        post = self.request.query_params.get("post_id", None)
 
         if post is not None:
             posttags = posttags.filter(post_id=post)
@@ -30,8 +32,8 @@ class PostTags(ViewSet):
         tag = Tag.objects.get(pk=request.data["tag_id"])
 
         posttag = PostTag()
-        posttag.post_id = post
-        posttag.tag_id = tag
+        posttag.post = post
+        posttag.tag = tag
 
         try: 
             posttag.save()
@@ -72,4 +74,5 @@ class PostTagSerializer(serializers.HyperlinkedModelSerializer):
 
     class Meta:
         model = PostTag
-        fields = ('id', 'post_id', 'tag_id', 'tag')
+        fields = ('id', 'post_id', 'tag')
+        depth = 1
