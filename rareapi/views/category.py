@@ -12,10 +12,10 @@ class Categories(ViewSet):
     """Level up game types"""
 
     def retrieve(self, request, pk=None):
-        """Handle GET requests for single game type
+        """Handle GET requests for single category
 
         Returns:
-            Response -- JSON serialized game type
+            Response -- JSON serialized category
         """
         try:
             category = Category.objects.get(pk=pk)
@@ -54,7 +54,7 @@ class Categories(ViewSet):
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
 class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for game types
+    """JSON serializer for category
 
     Arguments:
         serializers
@@ -67,7 +67,7 @@ class CategorySerializer(serializers.HyperlinkedModelSerializer):
         )
         fields = ('id', 'label')
 
-"""Basic Serializer for single post"""
+"""Basic Serializer for single category"""
 class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
