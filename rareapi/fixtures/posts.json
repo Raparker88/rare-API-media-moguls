@@ -1,0 +1,41 @@
+[
+    {
+        "model": "rareapi.post",
+        "pk": 1,
+        "fields": {
+            "rareuser": 1,
+            "category": 2,
+            "title": "BARKSGIVING APPROACHES",
+            "publication_date": "2020-08-18",
+            "image_url": "",
+            "content": "PROOF that your heckin pupper is the only reason your family invites you to Thanksgiving.",
+            "approved": true
+        }
+    },
+    {
+        "model": "rareapi.post",
+        "pk": 2,
+        "fields": {
+            "rareuser": 1,
+            "category": 2,
+            "title": "THE BARKALYPSE",
+            "publication_date": "2020-09-28",
+            "image_url": "",
+            "content": "PROOF that your heckin pupper is ushering in the End of Time.",
+            "approved": true
+        }
+    },
+    {
+        "model": "rareapi.post",
+        "pk": 3,
+        "fields": {
+            "rareuser": 1,
+            "category": 2,
+            "title": "THE BARK PLAGUE",
+            "publication_date": "2020-10-30",
+            "image_url": "",
+            "content": "PROOF that your heckin pupper is responsible for the spread of Covid-19 AND 5g towers.",
+            "approved": true
+        }
+    }
+]
