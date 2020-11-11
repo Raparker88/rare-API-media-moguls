@@ -11,8 +11,8 @@
         "model": "rareapi.posttag",
         "pk": 2,
         "fields": {
-            "post_id": 1,
-            "tag_id": 1
+            "post_id": 3,
+            "tag_id": 6
         }
     },
     {
