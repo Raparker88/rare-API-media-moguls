@@ -47,17 +47,17 @@ class Posts(ViewSet):
         return Response({}, status=status.HTTP_204_NO_CONTENT)
         
     def destroy(self, request, pk=None):
-        """Handle DELETE requests for a single category
+        """Handle DELETE requests for a single post
         Returns:
             Response -- 200, 404, or 500 status code
         """
         try:
-            category = Category.objects.get(pk=pk)
-            category.delete()
+            post = Post.objects.get(pk=pk)
+            post.delete()
 
             return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-        except Category.DoesNotExist as ex:
+        except Post.DoesNotExist as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
 
         except Exception as ex:
