@@ -76,7 +76,7 @@ class Posts(ViewSet):
         post.content = request.data["content"]
         post.rareuser = rareuser
 
-        category = Category.objects.get(pk=request.data["category"])
+        category = Category.objects.get(pk=request.data["category_id"])
         post.category = category
         post.save()
 
