@@ -11,3 +11,4 @@ python manage.py loaddata categories
 python manage.py loaddata tags
 python manage.py loaddata posts
 python manage.py loaddata posttags
+python manage.py loaddata comments
