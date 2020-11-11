@@ -52,7 +52,7 @@ class Posts(ViewSet):
 class PostRareUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = RareUser
-        fields = ('id', 'bio')
+        fields = ('id', 'username', 'is_active', 'is_staff', 'email')
 
 """Basic Serializer for single post"""
 class PostSerializer(serializers.ModelSerializer):

@@ -7,3 +7,19 @@ class RareUser(models.Model):
     bio = models.CharField(max_length=500)
     profile_image_url = models.ImageField(upload_to=None, height_field=None, width_field=None, max_length=None)
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    @property
+    def username(self):
+        return self.user.username
+
+    @property
+    def is_staff(self):
+        return self.user.is_staff
+
+    @property
+    def is_active(self):
+        return self.user.is_active
+
+    @property
+    def email(self):
+        return self.user.email
