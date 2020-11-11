@@ -35,6 +35,19 @@ class Tags(ViewSet):
             tags, many=True, context={'request': request})
         return Response(serializer.data)
 
+    def update(self, request, pk=None):
+        """Handle PUT requests for a tag
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+
+        tag = Tag.objects.get(pk=pk)
+        tag.label = request.data["label"]
+
+        tag.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
 class TagSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for tags
 
