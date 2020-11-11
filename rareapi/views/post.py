@@ -31,7 +31,7 @@ class Posts(ViewSet):
         try:
             post.save()
             serializer = PostSerializer(post, context={'request': request})
-            #iterate selected categories and save to database
+            #iterate selected tags and save relationships to database
             for tag in post.selected_tags:
 
                 posttag = PostTag()
@@ -74,13 +74,41 @@ class Posts(ViewSet):
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
         post.content = request.data["content"]
+        post.selected_tags = request.data["selected_tags"]
         post.rareuser = rareuser
 
-        category = Category.objects.get(pk=request.data["category"])
+        category = Category.objects.get(pk=request.data["category_id"])
         post.category = category
         post.save()
 
+        serializer = PostSerializer(post, context={'request': request})
+            #iterate selected tags and save relationships to database
+        for tag in post.selected_tags:
+
+            posttag = PostTag()
+            posttag.tag_id = int(tag["id"])
+            posttag.post_id = int(serializer.data["id"])
+            
+            posttag.save()
+
         return Response({}, status=status.HTTP_204_NO_CONTENT)
+        
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for a single post
+        Returns:
+            Response -- 200, 404, or 500 status code
+        """
+        try:
+            post = Post.objects.get(pk=pk)
+            post.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except Post.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
             
 
@@ -88,7 +116,7 @@ class Posts(ViewSet):
 class PostRareUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = RareUser
-        fields = ('id', 'username', 'is_active', 'is_staff', 'email')
+        fields = ('id', 'username', 'is_active', 'is_staff', 'email', 'full_name')
 
 """Basic Serializer for single post"""
 class PostSerializer(serializers.ModelSerializer):

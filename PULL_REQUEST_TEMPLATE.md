@@ -21,7 +21,7 @@ server
 4. Initialize virtual environment, and run the server.
 ```
 pipenv shell
-watchgod request_handler.main
+python manage.py runserver
 ```
 5. Test app functionality.
 > When user clicks on `New Post`, they should be redirected to a the PostForm page
