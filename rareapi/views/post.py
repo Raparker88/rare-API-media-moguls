@@ -1,11 +1,47 @@
 from django.http.response import HttpResponseServerError
+from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework import serializers
 from rest_framework import status
 from rest_framework.response import Response
-from rareapi.models import Post, RareUser, Category
+from rareapi.models import Post, RareUser, Category, PostTag
 
 class Posts(ViewSet):
+    def create(self, request):
+        """Handle POST operations for posts"""
+
+        rareuser = RareUser.objects.get(user=request.auth.user)
+        category = Category.objects.get(pk=request.data["category_id"])
+
+        post = Post()
+
+        post.category = category
+        post.rareuser = rareuser
+        post.title = request.data["title"]
+        post.publication_date = request.data["publication_date"]
+        post.image_url = request.data["image_url"]
+        post.content = request.data["content"]
+        post.selected_tags = request.data["selected_tags"]
+
+        if rareuser.is_staff:
+            post.approved = True
+        else:
+            post.approved = False
+
+        try:
+            post.save()
+            serializer = PostSerializer(post, context={'request': request})
+            #iterate selected categories and save to database
+            for tag in post.selected_tags:
+
+                posttag = PostTag()
+                posttag.tag_id = int(tag["id"])
+                posttag.post_id = int(serializer.data["id"])
+                
+                posttag.save()
+            return Response(serializer.data)
+        except ValidationError as ex:
+            return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
     def list(self, request):
 
         posts = Post.objects.all()
