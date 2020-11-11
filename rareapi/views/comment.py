@@ -15,7 +15,7 @@ class Comments(ViewSet):
     def create(self, request):
 
         author = RareUser.objects.get(user=request.auth.user)
-        post = Post.objects.get(pk=request.data["postId"])
+        post = Post.objects.get(pk=request.data["post_id"])
 
         comment = Comment()
         comment.post = post
@@ -59,17 +59,35 @@ class Comments(ViewSet):
             comments, many=True, context={'request': request})
         return Response(serializer.data)
 
+    def destroy(self, request, pk=None):
+        """Handle DELETE requests for a single comment
+
+        Returns:
+            Response -- 200, 404, or 500 status code
+        """
+        try:
+            comment = Comment.objects.get(pk=pk)
+            comment.delete()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        except Comment.DoesNotExist as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_404_NOT_FOUND)
+
+        except Exception as ex:
+            return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
 class CommentAuthorSerializer(serializers.ModelSerializer):
     """JSON serializer for post author's related Django user"""
     class Meta:
         model = RareUser
-        fields = ['username']
+        fields = ['id', 'username']
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for post"""
     class Meta:
         model = Post
-        fields = ('id')
+        fields = ['id', 'title']
 
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for comments"""
@@ -82,5 +100,5 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
             view_name='comment',
             lookup_field='id'
         )
-        fields = ('id', 'url', 'post', 'author',
+        fields = ('id', 'post', 'author',
                 'content', 'subject', 'created_on')
