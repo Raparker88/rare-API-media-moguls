@@ -53,19 +53,6 @@ class Categories(ViewSet):
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
-class CategorySerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for category
-
-    Arguments:
-        serializers
-    """
-    class Meta:
-        model = Category
-        url = serializers.HyperlinkedIdentityField(
-            view_name='category',
-            lookup_field='id'
-        )
-        fields = ('id', 'label')
 
 """Basic Serializer for single category"""
 class CategorySerializer(serializers.ModelSerializer):
