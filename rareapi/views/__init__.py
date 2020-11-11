@@ -5,3 +5,4 @@ from .posttag import PostTags
 from .post import Posts
 from .comment import Comments
 from .category import Categories
+from .user import Users
