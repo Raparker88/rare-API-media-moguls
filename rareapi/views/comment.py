@@ -31,6 +31,17 @@ class Comments(ViewSet):
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
 
+    def retrieve(self, request, pk=None):
+        """Handle GET requests for single comment
+
+        """
+        try:
+            comment = Comment.objects.get(pk=pk)
+            serializer = CommentSerializer(comment, context={'request': request})
+            return Response(serializer.data)
+        except Exception:
+            return HttpResponseServerError(ex)
+
     def list(self, request):
         """Handle GET requests to comments resource
 
@@ -39,10 +50,10 @@ class Comments(ViewSet):
         """
         comments = Comment.objects.all()
 
-        # Support filtering events by game
-        post = self.request.query_params.get('postId', None)
+        # Support filtering comments by post
+        post = self.request.query_params.get('post_id', None)
         if post is not None:
-            comments = comments.filter(post__id=post)
+            comments = comments.filter(post_id=post)
 
         serializer = CommentSerializer(
             comments, many=True, context={'request': request})

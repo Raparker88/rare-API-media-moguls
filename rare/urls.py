@@ -1,6 +1,6 @@
 from django.conf.urls import include
 from django.urls import path
-from rareapi.views import Tags
+from rareapi.views import Tags, PostTags
 from rareapi.views import register_user, login_user
 from rareapi.views import Posts
 from rareapi.views import Comments
@@ -12,6 +12,7 @@ router = routers.DefaultRouter(trailing_slash=False)
 router.register(r'categories', Categories, 'category')
 router.register(r'tags', Tags, 'tag')
 router.register(r'comments', Comments, 'comment')
+router.register(r'post_tags', PostTags, 'posttag')
 router.register(r'posts', Posts, 'post')
 
 urlpatterns = [
