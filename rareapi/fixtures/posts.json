@@ -29,13 +29,26 @@
         "model": "rareapi.post",
         "pk": 3,
         "fields": {
-            "rareuser": 2,
+            "rareuser": 1,
             "category": 2,
             "title": "THE BARK PLAGUE",
             "publication_date": "2020-10-30",
             "image_url": "",
             "content": "PROOF that your heckin pupper is responsible for the spread of Covid-19 AND 5g towers.",
             "approved": true
+        }
+    },
+    {
+        "model": "rareapi.post",
+        "pk": 4,
+        "fields": {
+            "rareuser": 1,
+            "category": 3,
+            "title": "WE HAVE A NEW POST, GUYS",
+            "publication_date": "2020-10-30",
+            "image_url": "",
+            "content": "Just so you have something to approve!",
+            "approved": false
         }
     }
 ]
