@@ -84,4 +84,3 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
         )
         fields = ('id', 'url', 'post', 'author',
                 'content', 'subject', 'created_on')
-# Ready for postman testing once data is loaded
