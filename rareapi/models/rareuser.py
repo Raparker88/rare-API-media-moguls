@@ -9,5 +9,17 @@ class RareUser(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     @property
-    def full_name(self):
-        return (f'{self.user.first_name} {self.user.last_name}')
+    def username(self):
+        return self.user.username
+
+    @property
+    def is_staff(self):
+        return self.user.is_staff
+
+    @property
+    def is_active(self):
+        return self.user.is_active
+
+    @property
+    def email(self):
+        return self.user.email
