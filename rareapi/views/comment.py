@@ -59,6 +59,25 @@ class Comments(ViewSet):
             comments, many=True, context={'request': request})
         return Response(serializer.data)
 
+    def update(self, request, pk=None):
+        """Handle PUT requests for a comment
+
+        Returns:
+            Response -- Empty body with 204 status code
+        """
+        author = RareUser.objects.get(user=request.auth.user)
+        post = Post.objects.get(pk=request.data["post_id"])
+
+        comment = Comment.objects.get(pk=pk)
+        comment.post = post
+        comment.author = author
+        comment.content = request.data["content"]
+        comment.subject = request.data["subject"]
+        
+        comment.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
     def destroy(self, request, pk=None):
         """Handle DELETE requests for a single comment
 
