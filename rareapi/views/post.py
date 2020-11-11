@@ -9,9 +9,9 @@ class Posts(ViewSet):
 
         posts = Post.objects.all()
 
-        user_id = self.request.query_params.get('user_id', None)
-        if user_id is not None:
-            posts = posts.filter(user_id=user_id)
+        rareuser_id = self.request.query_params.get('rareuser_id', None)
+        if rareuser_id is not None:
+            posts = posts.filter(rareuser_id=rareuser_id)
         
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
