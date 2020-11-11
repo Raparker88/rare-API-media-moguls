@@ -29,7 +29,7 @@
         "model": "rareapi.post",
         "pk": 3,
         "fields": {
-            "rareuser": 1,
+            "rareuser": 2,
             "category": 2,
             "title": "THE BARK PLAGUE",
             "publication_date": "2020-10-30",

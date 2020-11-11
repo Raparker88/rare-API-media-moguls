@@ -5,7 +5,7 @@ from rareapi.views import register_user, login_user
 from rareapi.views import Posts
 from rareapi.views import Comments
 from rest_framework import routers
-from rareapi.views import Categories, Tags, Posts, Users
+from rareapi.views import Categories, Posts, Users
 
 
 router = routers.DefaultRouter(trailing_slash=False)

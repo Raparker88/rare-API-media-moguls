@@ -4,14 +4,14 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
-from rareapi.models import Category
+from rareapi.models import Category, RareUser
 
 
 class Categories(ViewSet):
     """Rare categories"""
 
     def create(self, request):
-        """Handle POST operations for categories"""
+        """Handle category operations for categories"""
 
         category = Category()
 
@@ -65,6 +65,15 @@ class Categories(ViewSet):
 
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+
+    def update(self, request, pk=None):
+        """Handle PUT requests for Categories"""
+
+        category = Category.objects.get(pk=pk)
+        category.label = request.data["label"]
+        category.save()
+
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 
 
 """Basic Serializer for single category"""
