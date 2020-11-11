@@ -1,6 +1,7 @@
 from django.http.response import HttpResponseServerError
 from rest_framework.viewsets import ViewSet
 from rest_framework import serializers
+from rest_framework import status
 from rest_framework.response import Response
 from rareapi.models import Post, RareUser, Category
 
@@ -35,13 +36,13 @@ class Posts(ViewSet):
 
         post = Post.objects.get(pk=pk)
         post.title = request.data["title"]
-        post.publication_date = request.data["publicationDate"]
+        post.publication_date = request.data["publication_date"]
         post.content = request.data["content"]
         post.rareuser = rareuser
 
-        category = Category.objects.get(pk=request.data["categoryId"])
+        category = Category.objects.get(pk=request.data["category"])
         post.category = category
-        category.save()
+        post.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
         
