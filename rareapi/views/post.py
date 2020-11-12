@@ -119,10 +119,8 @@ class Posts(ViewSet):
             post = Post.objects.get(pk=pk)
 
             if post.approved == True:
-                return Response(
-                    {'message': 'Admin already approved post.'},
-                    status=status.HTTP_422_UNPROCESSABLE_ENTITY
-                )
+                post.approved = False
+                post.save()
             
             else:
                 post.approved = True
