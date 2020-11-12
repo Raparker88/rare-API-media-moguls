@@ -42,7 +42,7 @@
         "model": "rareapi.post",
         "pk": 4,
         "fields": {
-            "rareuser": 1,
+            "rareuser": 2,
             "category": 3,
             "title": "WE HAVE A NEW POST, GUYS",
             "publication_date": "2020-10-30",
