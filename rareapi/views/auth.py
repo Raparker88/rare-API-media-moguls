@@ -31,7 +31,7 @@ def login_user(request):
         if authenticated_user is not None:
             token = Token.objects.get(user=authenticated_user)
             rare_user = RareUser.objects.get(user=authenticated_user)
-            data = json.dumps({"valid": True, "token": token.key, "user_id": rare_user.id})
+            data = json.dumps({"valid": True, "token": token.key})
             return HttpResponse(data, content_type='application/json')
 
         else:
@@ -61,15 +61,14 @@ def register_user(request):
         is_active=True
     )
 
-    rareuser = RareUser.objects.create(
+    rare_user = RareUser.objects.create(
         bio=req_body['bio'],
         profile_image_url=req_body['profile_image_url'],
-        created_on= datetime.date.today(),
         user=new_user
     )
 
     # Commit the user to the database by saving it
-    rareuser.save()
+    rare_user.save()
 
     # Use the REST Framework's token generator on the new user account
     token = Token.objects.create(user=new_user)
