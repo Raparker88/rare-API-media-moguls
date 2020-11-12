@@ -3,6 +3,7 @@ from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
 from rest_framework import serializers
 from rest_framework import status
+from rest_framework.decorators import action
 from rest_framework.response import Response
 from rareapi.models import Post, RareUser, Category, PostTag
 
@@ -110,7 +111,24 @@ class Posts(ViewSet):
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         
+    @action(methods=['get', 'put'], detail=True)
+    def approval(self,request, pk=None):
+        """Manages admins approving posts"""
+
+        if request.method == "PUT":
+            post = Post.objects.get(pk=pk)
+
+            if post.approved == True:
+                post.approved = False
+                post.save()
+
+                return Response({}, status=status.HTTP_204_NO_CONTENT)
             
+            else:
+                post.approved = True
+                post.save()
+
+                return Response({}, status=status.HTTP_204_NO_CONTENT)
 
 """Serializer for RareUser Info in a post"""         
 class PostRareUserSerializer(serializers.ModelSerializer):
@@ -123,5 +141,5 @@ class PostSerializer(serializers.ModelSerializer):
     rareuser = PostRareUserSerializer(many=False)
     class Meta:
         model = Post
-        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category')
+        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'approved')
         depth = 1
