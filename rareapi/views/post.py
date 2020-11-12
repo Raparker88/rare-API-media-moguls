@@ -121,6 +121,8 @@ class Posts(ViewSet):
             if post.approved == True:
                 post.approved = False
                 post.save()
+
+                return Response({}, status=status.HTTP_204_NO_CONTENT)
             
             else:
                 post.approved = True
