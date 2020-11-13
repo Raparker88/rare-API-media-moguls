@@ -61,6 +61,14 @@ class Posts(ViewSet):
         """
         try:
             post = Post.objects.get(pk=pk)
+
+            post.is_user_author = None
+            current_rareuser = RareUser.objects.get(user=request.auth.user)
+            if post.rareuser == current_rareuser:
+                post.is_user_author = True
+            else:
+                post.is_user_author=False
+
             serializer = PostSerializer(post, context={'request': request})
             return Response(serializer.data)
         except Exception as ex:
@@ -141,5 +149,5 @@ class PostSerializer(serializers.ModelSerializer):
     rareuser = PostRareUserSerializer(many=False)
     class Meta:
         model = Post
-        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'approved')
+        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'approved', 'is_user_author')
         depth = 1

@@ -10,3 +10,11 @@ class Post(models.Model):
     image_url = models.ImageField()
     content = models.CharField(max_length=5000)
     approved = models.BooleanField()
+
+    @property
+    def is_user_author(self):
+        return self.__is_user_author
+
+    @is_user_author.setter
+    def is_user_author(self, value):
+        self.__is_user_author = value
