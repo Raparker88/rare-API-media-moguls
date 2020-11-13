@@ -44,8 +44,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = User
-        fields = ('id', 'username', 'is_staff', 'is_active') 
-        fields = ('id', 'username', 'is_staff', 'is_active')
+        fields = ('username', 'is_staff', 'is_active', 'first_name', 'last_name', 'email', 'date_joined') 
+        
 
 """Serializer for RareUser Info in a post"""         
 class PostRareUserSerializer(serializers.ModelSerializer):
