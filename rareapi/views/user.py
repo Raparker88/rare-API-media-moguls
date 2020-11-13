@@ -5,6 +5,7 @@ from rest_framework.viewsets import ViewSet
 from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
+from rest_framework.decorators import action
 from django.contrib.auth.models import User
 from rareapi.models import RareUser, Post
 from rest_framework.decorators import action
@@ -32,6 +33,11 @@ class Users(ViewSet):
         posts = Post.objects.filter(rareuser=rareuser)
 
         serializer = PostSerializer(posts, many=True, context={'request':request})
+    def current_user(self, request):
+        current_user = request.auth.user
+        
+        serializer = UserSerializer(current_user, context={'request': request})
+        
         return Response(serializer.data)
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
@@ -57,3 +63,4 @@ class PostSerializer(serializers.ModelSerializer):
         model = Post
         fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'approved')
         depth = 1
+        fields = ('username', 'is_staff', 'is_active', 'email', 'date_joined', 'first_name', 'last_name')
