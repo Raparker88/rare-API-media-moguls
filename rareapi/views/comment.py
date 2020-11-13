@@ -55,6 +55,14 @@ class Comments(ViewSet):
         if post is not None:
             comments = comments.filter(post_id=post)
 
+        for comment in comments:
+            comment.is_user_author = None
+            current_rareuser = RareUser.objects.get(user=request.auth.user)
+            if comment.author == current_rareuser:
+                comment.is_user_author = True
+            else:
+                comment.is_user_author=False
+
         serializer = CommentSerializer(
             comments, many=True, context={'request': request})
         return Response(serializer.data)
@@ -120,4 +128,4 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
             lookup_field='id'
         )
         fields = ('id', 'post', 'author',
-                'content', 'subject', 'created_on')
+                'content', 'subject', 'created_on', 'is_user_author')
