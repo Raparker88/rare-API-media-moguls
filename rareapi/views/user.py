@@ -29,6 +29,14 @@ class Users(ViewSet):
         serializer = PostSerializer(posts, many=True, context={'request':request})
         return Response(serializer.data)
 
+    @action(methods=['get'], detail=False)
+    def current_user(self, request):
+        current_user = request.auth.user
+        
+        serializer = UserSerializer(current_user, context={'request': request})
+        
+        return Response(serializer.data)
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for rareusers
     Arguments:
