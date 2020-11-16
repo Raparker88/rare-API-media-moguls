@@ -27,13 +27,13 @@ class Subscriptions(ViewSet):
 
 
 class RareUserSerializer(serializers.ModelSerializer):
-    """JSON serializer for post author's related Django user"""
+    """JSON serializer for subscription follower and author related Django user"""
     class Meta:
         model = RareUser
         fields = ['id', 'username']
 
 class SubscriptionSerializer(serializers.HyperlinkedModelSerializer):
-    """JSON serializer for comments"""
+    """JSON serializer for subscriptions"""
     follower_id = RareUserSerializer(many=False)
     author_id = RareUserSerializer(many=False)
 
