@@ -1,0 +1,26 @@
+[
+    {
+        "model": "rareapi.reaction",
+        "pk": 1,
+        "fields": {
+            "label": "love",
+            "image_url": "/media/emojis/Heart_Eyes_Emoji.png"
+        }
+    },
+    {
+        "model": "rareapi.reaction",
+        "pk": 2,
+        "fields": {
+            "label": "nerd",
+            "image_url": "/media/emojis/Nerd_Emoji_With_Glasses.png"
+        }
+    },
+    {
+        "model": "rareapi.reaction",
+        "pk": 3,
+        "fields": {
+            "label": "poop",
+            "image_url": "/media/emojis/Poop_Emoji"
+        }
+    }
+]
