@@ -1,0 +1,32 @@
+[
+    {
+        "model": "rareapi.subscription",
+        "pk": 1,
+        "fields": {
+            "follower_id": 1,
+            "author_id": 2,
+            "created_on": "2020-10-15T13:19:37+00:00",
+            "ended_on": null
+        }
+    },
+    {
+        "model": "rareapi.subscription",
+        "pk": 2,
+        "fields": {
+            "follower_id": 2,
+            "author_id": 1,
+            "created_on": "2020-11-09T16:25:37+00:00",
+            "ended_on": "2020-12-10T12:25:37+00:00"
+        }
+    },
+    {
+        "model": "rareapi.subscription",
+        "pk": 3,
+        "fields": {
+            "follower_id": 2,
+            "author_id": 1,
+            "created_on": "2020-12-13T13:19:37+00:00",
+            "ended_on": null
+        }
+    }
+]
