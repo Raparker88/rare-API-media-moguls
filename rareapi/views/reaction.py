@@ -22,9 +22,8 @@ class Reactions(ViewSet):
         post_id = self.request.query_params.get('post_id', None)
         if post_id is not None:
             for reaction in reactions:
-                post_reactions = PostReaction.objects.filter(post_id=post_id)
-                final_count = post_reactions.filter(reaction=reaction)
-                reaction.count = len(final_count)
+                post_reactions = PostReaction.objects.filter(post_id=post_id, reaction=reaction)
+                reaction.count = len(post_reactions)
 
 
         serializer = ReactionSerializer(
