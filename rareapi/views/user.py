@@ -6,8 +6,9 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from django.contrib.auth.models import User
-from rareapi.models import RareUser
+from rareapi.models import RareUser, Post
 from rest_framework.decorators import action
+from rareapi.views.post import PostSerializer, PostRareUserSerializer
 
 class Users(ViewSet):
     """Users"""
@@ -82,8 +83,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model = User
         fields = ('id','username', 'is_staff', 'is_active', 'first_name', 'last_name', 'email', 'date_joined')
 
-"""Serializer for RareUser info in profile detail view"""
 class RareUserSerializer(serializers.ModelSerializer):
+    """JSON serializer for RareUser info in profile detail view"""
     class Meta:
         model = RareUser
         fields = ("id", "bio", "is_staff", "is_active", "full_name", "profile_image_url", "is_current_user", "username", "email", "date_joined")
