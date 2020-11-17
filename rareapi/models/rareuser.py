@@ -31,3 +31,11 @@ class RareUser(models.Model):
     @property
     def date_joined(self):
         return self.user.date_joined
+
+    @property
+    def is_current_user(self):
+        return self.__is_current_user
+
+    @is_current_user.setter
+    def is_current_user(self,value):
+        self.__is_current_user = value

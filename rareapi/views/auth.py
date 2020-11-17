@@ -31,7 +31,7 @@ def login_user(request):
         if authenticated_user is not None:
             token = Token.objects.get(user=authenticated_user)
             rare_user = RareUser.objects.get(user=authenticated_user)
-            data = json.dumps({"valid": True, "token": token.key})
+            data = json.dumps({"valid": True, "token": token.key, "is_staff": rare_user.is_staff})
             return HttpResponse(data, content_type='application/json')
 
         else:
@@ -58,7 +58,8 @@ def register_user(request):
         password=req_body['password'],
         first_name=req_body['first_name'],
         last_name=req_body['last_name'],
-        is_active=True
+        is_active=True,
+        is_staff=False
     )
 
     rare_user = RareUser.objects.create(
