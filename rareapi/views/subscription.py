@@ -34,7 +34,7 @@ class Subscriptions(ViewSet):
         only info needed in request is author ID"""
 
         follower = RareUser.objects.get(user=request.auth.user)
-        author = RareUser.objects.get(pk=request.data["author"])
+        author = RareUser.objects.get(pk=request.data["author_id"])
 
         subscription = Subscription()
         subscription.follower = follower
