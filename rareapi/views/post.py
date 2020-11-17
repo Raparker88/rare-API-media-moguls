@@ -6,8 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rareapi.models import Post, RareUser, Category, PostTag
-from rareapi.views.user import PostRareUserSerializer, PostSerializer
-
+from rareapi.views.category import CategorySerializer
 
 class Posts(ViewSet):
     def create(self, request):
@@ -141,3 +140,18 @@ class Posts(ViewSet):
                 post.save()
 
                 return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+"""Serializer for RareUser Info in a post"""
+class PostRareUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RareUser
+        fields = ('id', 'username', 'is_active', 'is_staff', 'email', 'full_name')
+
+"""Basic Serializer for single post"""
+class PostSerializer(serializers.ModelSerializer):
+    rareuser = PostRareUserSerializer(many=False)
+    category = CategorySerializer(many=False)
+    class Meta:
+        model = Post
+        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'is_user_author', 'approved')
+        depth = 1

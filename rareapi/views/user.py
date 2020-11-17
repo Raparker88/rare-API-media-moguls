@@ -6,9 +6,8 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from django.contrib.auth.models import User
-from rareapi.models import RareUser, Post
+from rareapi.models import RareUser
 from rest_framework.decorators import action
-from rareapi.views.category import CategorySerializer
 
 class Users(ViewSet):
     """Users"""
@@ -23,7 +22,8 @@ class Users(ViewSet):
         return Response(serializer.data)
 
     def retrieve(self, request, pk=None):
-        """Handle GET request for single user for User Profile View
+        """Handles GET requests to users resource for single User
+        Written for User Profile View
         Returns:
             Response -- JSON serielized rareuser instance
         """
@@ -81,21 +81,6 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model = User
         fields = ('id','username', 'is_staff', 'is_active', 'first_name', 'last_name', 'email', 'date_joined')
-
-"""Serializer for RareUser Info in a post"""
-class PostRareUserSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = RareUser
-        fields = ('id', 'username', 'is_active', 'is_staff', 'email', 'full_name')
-
-"""Basic Serializer for single post"""
-class PostSerializer(serializers.ModelSerializer):
-    rareuser = PostRareUserSerializer(many=False)
-    category = CategorySerializer(many=False)
-    class Meta:
-        model = Post
-        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'is_user_author', 'approved')
-        depth = 1
 
 """Serializer for RareUser info in profile detail view"""
 class RareUserSerializer(serializers.ModelSerializer):
