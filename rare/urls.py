@@ -4,7 +4,6 @@ from django.conf import settings
 from django.conf.urls.static import static
 from rareapi.views import Tags, PostTags
 from rareapi.views import register_user, login_user
-from rareapi.views import Posts
 from rareapi.views import Comments
 from rest_framework import routers
 from rareapi.views import Categories, Posts, Users, Reactions, Subscriptions
