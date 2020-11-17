@@ -40,14 +40,14 @@ class Reactions(ViewSet):
             reaction = Reaction.objects.get(pk=pk)
 
             try:
-                # Determine if the user already reacted
+                # Determine if the user already used this reaction on this post.
                 like = PostReaction.objects.get(
                     post=post, user=rareuser, reaction=reaction)
                 like.delete()
                 return Response({}, status=status.HTTP_204_NO_CONTENT)
                 
             except PostReaction.DoesNotExist:
-                # The user is not signed up.
+                # The user has not used this reaction on this post.
                 like = PostReaction()
                 like.post = post
                 like.user = rareuser
