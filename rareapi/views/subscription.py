@@ -50,6 +50,7 @@ class Subscriptions(ViewSet):
             return Response({"reason": "user cannot subscribe to their own posts"}, status=status.HTTP_400_BAD_REQUEST)
 
         @action(methods=['get'], detail=False)
+        """Gets only active subscriptions (those without an ended_on) for the current user"""
         def get_current_subscriptions(self, request):
             follower = RareUser.objects.get(user=request.auth.user)
 
