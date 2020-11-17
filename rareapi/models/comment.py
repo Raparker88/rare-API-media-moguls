@@ -8,4 +8,12 @@ class Comment(models.Model):
     content = models.CharField(max_length=500)
     subject = models.CharField(max_length=500)
     created_on = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def is_user_author(self):
+        return self.__is_user_author
+
+    @is_user_author.setter
+    def is_user_author(self, value):
+        self.__is_user_author = value
     

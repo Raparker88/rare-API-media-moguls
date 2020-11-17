@@ -20,6 +20,8 @@ class Users(ViewSet):
         serializer = UserSerializer(
             users, many=True, context={'request': request})
         return Response(serializer.data)
+        
+
 
     @action(methods=['get'], detail=False)
     def posts(self, request):
@@ -37,6 +39,22 @@ class Users(ViewSet):
         
         return Response(serializer.data)
 
+    @action(methods=['patch'], detail=True)
+    def change_type(self, request, pk=None):
+        user_obj = User.objects.get(pk=pk)
+
+        user_obj.is_staff = not user_obj.is_staff
+        user_obj.save()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+    @action(methods=['patch'], detail=True)
+    def change_active(self, request, pk=None):
+        user_obj = User.objects.get(pk=pk)
+
+        user_obj.is_active = not user_obj.is_active
+        user_obj.save()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for rareusers
     Arguments:
@@ -44,8 +62,8 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     """
     class Meta:
         model = User
-        fields = ('id', 'username', 'is_staff', 'is_active') 
-        fields = ('id', 'username', 'is_staff', 'is_active')
+        fields = ('id','username', 'is_staff', 'is_active', 'first_name', 'last_name', 'email', 'date_joined') 
+        
 
 """Serializer for RareUser Info in a post"""         
 class PostRareUserSerializer(serializers.ModelSerializer):
