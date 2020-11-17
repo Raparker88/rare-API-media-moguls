@@ -6,3 +6,4 @@ from .rareuser import RareUser
 from .tag import Tag
 from .postreaction import PostReaction
 from .reaction import Reaction
+from .subscription import Subscription
