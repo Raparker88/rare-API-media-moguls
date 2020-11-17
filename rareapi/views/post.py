@@ -103,13 +103,10 @@ class Posts(ViewSet):
 
             posttag = PostTag()
             posttag.tag_id = int(tag["id"])
-<<<<<<< HEAD
             posttag.category_id = int(serializer.data["id"])
             
-=======
             posttag.post_id = int(serializer.data["id"])
 
->>>>>>> main
             posttag.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
