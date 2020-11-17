@@ -30,12 +30,12 @@ class RareUserSerializer(serializers.ModelSerializer):
     """JSON serializer for subscription follower and author related Django user"""
     class Meta:
         model = RareUser
-        fields = ['id', 'username']
+        fields = ('id', 'username')
 
 class SubscriptionSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for subscriptions"""
-    follower_id = RareUserSerializer(many=False)
-    author_id = RareUserSerializer(many=False)
+    follower = RareUserSerializer(many=False)
+    author = RareUserSerializer(many=False)
 
     class Meta:
         model = Subscription
@@ -43,4 +43,4 @@ class SubscriptionSerializer(serializers.HyperlinkedModelSerializer):
             view_name='subscription',
             lookup_field='id'
         )
-        fields = ('id', 'follower_id', 'author_id', 'created_on', 'ended_on')
+        fields = ('id', 'follower', 'author', 'created_on', 'ended_on')
