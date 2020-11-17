@@ -103,7 +103,6 @@ class Posts(ViewSet):
 
             posttag = PostTag()
             posttag.tag_id = int(tag["id"])
-            posttag.category_id = int(serializer.data["id"])
             
             posttag.post_id = int(serializer.data["id"])
 
