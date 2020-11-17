@@ -44,10 +44,9 @@ class Reactions(ViewSet):
                 # Determine if the user already reacted
                 like = PostReaction.objects.get(
                     post=post, user=rareuser, reaction=reaction)
-                return Response(
-                    {'message': 'User already clicked this reaction.'},
-                    status=status.HTTP_422_UNPROCESSABLE_ENTITY
-                )
+                like.delete()
+                return Response({}, status=status.HTTP_204_NO_CONTENT)
+                
             except PostReaction.DoesNotExist:
                 # The user is not signed up.
                 like = PostReaction()
