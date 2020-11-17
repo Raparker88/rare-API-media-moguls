@@ -57,8 +57,7 @@ class Subscriptions(ViewSet):
         follower = RareUser.objects.get(user=request.auth.user)
 
         if follower is not None:
-            subscriptions = subscriptions.filter(follower_id=follower)
-            subscriptions = subscriptions.filter(ended_on__isnull=True)
+            subscriptions = subscriptions.filter(follower_id=follower, ended_on__isnull=True)
 
         serializer = SubscriptionSerializer(
             subscriptions, many=True, context={'request': request})
