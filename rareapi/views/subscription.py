@@ -1,4 +1,5 @@
 """View module for handling requests about posttags"""
+import datetime
 from django.http import HttpResponseServerError
 from django.core.exceptions import ValidationError
 from rest_framework.viewsets import ViewSet
@@ -62,6 +63,15 @@ class Subscriptions(ViewSet):
         serializer = SubscriptionSerializer(
             subscriptions, many=True, context={'request': request})
         return Response(serializer.data)
+
+    @action(methods=['patch'], detail=True)
+    # Adds an ended_on for an active subscription between a follower and author
+    def unsubscribe(self, request, pk=None):
+        subscription_obj = Subscription.objects.get(pk=pk)
+
+        subscription_obj.ended_on = datetime.datetime.now()
+        subscription_obj.save()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
 class RareUserSerializer(serializers.ModelSerializer):
     """JSON serializer for subscription follower and author related Django user"""
     class Meta:
