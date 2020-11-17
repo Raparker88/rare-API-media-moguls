@@ -94,7 +94,7 @@ class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=False)
     class Meta:
         model = Post
-        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'rareuser_id', 'is_user_author', 'approved')
+        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category', 'is_user_author', 'approved')
         depth = 1
 
 """Serializer for RareUser info in profile detail view"""
