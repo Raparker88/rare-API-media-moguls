@@ -49,18 +49,19 @@ class Subscriptions(ViewSet):
         else:
             return Response({"reason": "user cannot subscribe to their own posts"}, status=status.HTTP_400_BAD_REQUEST)
 
-        @action(methods=['get'], detail=False)
-        # Gets only active subscriptions (those without an ended_on) for the current user
-        def get_current_subscriptions(self, request):
-            follower = RareUser.objects.get(user=request.auth.user)
+    @action(methods=['get'], detail=False)
+    # Gets only active subscriptions (those without an ended_on) for the current user
+    def get_current_subscriptions(self, request):
+        subscriptions = Subscription.objects.all()
+        follower = RareUser.objects.get(user=request.auth.user)
 
-            if follower is not None:
-                subscriptions = subscriptions.filter(follower_id=follower)
-                subscriptions = subscriptions.filter(ended_on__isnull=True)
+        if follower is not None:
+            subscriptions = subscriptions.filter(follower_id=follower)
+            subscriptions = subscriptions.filter(ended_on__isnull=True)
 
-            serializer = SubscriptionSerializer(
-                subscriptions, many=True, context={'request': request})
-            return Response(serializer.data)
+        serializer = SubscriptionSerializer(
+            subscriptions, many=True, context={'request': request})
+        return Response(serializer.data)
 class RareUserSerializer(serializers.ModelSerializer):
     """JSON serializer for subscription follower and author related Django user"""
     class Meta:
