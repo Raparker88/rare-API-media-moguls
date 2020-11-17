@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from rareapi.models import Post, RareUser, Category, PostTag
+from rareapi.views.category import CategorySerializer
 
 class Posts(ViewSet):
     def create(self, request):
@@ -38,22 +39,24 @@ class Posts(ViewSet):
                 posttag = PostTag()
                 posttag.tag_id = int(tag["id"])
                 posttag.post_id = int(serializer.data["id"])
-                
+
                 posttag.save()
             return Response(serializer.data)
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
-    def list(self, request):
 
+    def list(self, request):
+        """Handles GET request for posts by logged in user"""
         posts = Post.objects.all()
 
         rareuser_id = self.request.query_params.get('rareuser_id', None)
+
         if rareuser_id is not None:
             posts = posts.filter(rareuser_id=rareuser_id)
-        
+
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
-    
+
     def retrieve(self, request, pk=None):
         """Handle GET request for single post
         Returns:
@@ -73,7 +76,7 @@ class Posts(ViewSet):
             return Response(serializer.data)
         except Exception as ex:
             return HttpResponseServerError(ex)
-    
+
     def update(self, request, pk=None):
         """Handle PUT requests for posts"""
 
@@ -97,11 +100,11 @@ class Posts(ViewSet):
             posttag = PostTag()
             posttag.tag_id = int(tag["id"])
             posttag.post_id = int(serializer.data["id"])
-            
+
             posttag.save()
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
-        
+
     def destroy(self, request, pk=None):
         """Handle DELETE requests for a single post
         Returns:
@@ -118,7 +121,7 @@ class Posts(ViewSet):
 
         except Exception as ex:
             return Response({'message': ex.args[0]}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        
+
     @action(methods=['get', 'put'], detail=True)
     def approval(self,request, pk=None):
         """Manages admins approving posts"""
@@ -131,22 +134,23 @@ class Posts(ViewSet):
                 post.save()
 
                 return Response({}, status=status.HTTP_204_NO_CONTENT)
-            
+
             else:
                 post.approved = True
                 post.save()
 
                 return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-"""Serializer for RareUser Info in a post"""         
+"""Serializer for RareUser Info in a post"""
 class PostRareUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = RareUser
-        fields = ('username', 'is_active', 'is_staff', 'email', 'full_name')
+        fields = ('id', 'username', 'is_active', 'is_staff', 'email', 'full_name')
 
 """Basic Serializer for single post"""
 class PostSerializer(serializers.ModelSerializer):
     rareuser = PostRareUserSerializer(many=False)
+    category = CategorySerializer(many=False)
     class Meta:
         model = Post
         fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category','category_id', 'approved', 'is_user_author')
