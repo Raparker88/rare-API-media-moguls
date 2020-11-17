@@ -42,8 +42,10 @@ class Users(ViewSet):
 
             return Response(rareuser.data)
 
-        except Exception as ex:
-            return HttpResponseServerError(ex)
+        except RareUser.DoesNotExist:
+            return Response(
+                {'message': 'User does not exist.'},
+                status=status.HTTP_400_BAD_REQUEST)
 
     @action(methods=['get'], detail=False)
     def posts(self, request):
