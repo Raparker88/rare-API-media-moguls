@@ -34,6 +34,15 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
+            name='RareUser',
+            fields=[
+                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
+                ('bio', models.CharField(max_length=500)),
+                ('profile_image_url', models.ImageField(upload_to=None)),
+                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+            ],
+        ),
+        migrations.CreateModel(
             name='Tag',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
@@ -41,12 +50,13 @@ class Migration(migrations.Migration):
             ],
         ),
         migrations.CreateModel(
-            name='RareUser',
+            name='Subscription',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('bio', models.CharField(max_length=500)),
-                ('profile_image_url', models.ImageField(upload_to=None)),
-                ('user', models.OneToOneField(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('created_on', models.DateTimeField(auto_now_add=True)),
+                ('ended_on', models.DateTimeField(null=True)),
+                ('author', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscribers', to='rareapi.rareuser')),
+                ('follower', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='subscriptions', to='rareapi.rareuser')),
             ],
         ),
         migrations.CreateModel(
