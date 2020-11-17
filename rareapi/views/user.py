@@ -47,6 +47,14 @@ class Users(ViewSet):
         user_obj.save()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
+    @action(methods=['patch'], detail=True)
+    def change_active(self, request, pk=None):
+        user_obj = User.objects.get(pk=pk)
+
+        user_obj.is_active = not user_obj.is_active
+        user_obj.save()
+        return Response({}, status=status.HTTP_204_NO_CONTENT)
+
 class UserSerializer(serializers.HyperlinkedModelSerializer):
     """JSON serializer for rareusers
     Arguments:
