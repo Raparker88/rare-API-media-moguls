@@ -2,10 +2,9 @@ from django.conf.urls import include
 from django.urls import path
 from rareapi.views import Tags, PostTags
 from rareapi.views import register_user, login_user
-from rareapi.views import Posts
 from rareapi.views import Comments
-from rest_framework import routers
 from rareapi.views import Categories, Posts, Users
+from rest_framework import routers
 
 
 router = routers.DefaultRouter(trailing_slash=False)
