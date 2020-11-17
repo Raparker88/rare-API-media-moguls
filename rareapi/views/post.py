@@ -43,6 +43,7 @@ class Posts(ViewSet):
             return Response(serializer.data)
         except ValidationError as ex:
             return Response({"reason": ex.message}, status=status.HTTP_400_BAD_REQUEST)
+
     def list(self, request):
 
         posts = Post.objects.all()
@@ -142,7 +143,7 @@ class Posts(ViewSet):
 class PostRareUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = RareUser
-        fields = ('username', 'is_active', 'is_staff', 'email', 'full_name')
+        fields = ('id', 'username', 'is_active', 'is_staff', 'email', 'full_name')
 
 """Basic Serializer for single post"""
 class PostSerializer(serializers.ModelSerializer):
