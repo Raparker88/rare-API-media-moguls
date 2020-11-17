@@ -1,0 +1,56 @@
+[
+    {
+        "model": "rareapi.postreaction",
+        "pk": 1,
+        "fields": {
+            "user_id": 1,
+            "reaction_id": 1,
+            "post_id": 1
+        }
+    },
+    {
+        "model": "rareapi.postreaction",
+        "pk": 2,
+        "fields": {
+            "user_id": 1,
+            "reaction_id": 2,
+            "post_id": 1
+        }
+    },
+    {
+        "model": "rareapi.postreaction",
+        "pk": 3,
+        "fields": {
+            "user_id": 1,
+            "reaction_id": 3,
+            "post_id": 1
+        }
+    },
+    {
+        "model": "rareapi.postreaction",
+        "pk": 4,
+        "fields": {
+            "user_id": 1,
+            "reaction_id": 1,
+            "post_id": 2
+        }
+    },
+    {
+        "model": "rareapi.postreaction",
+        "pk": 5,
+        "fields": {
+            "user_id": 1,
+            "reaction_id": 2,
+            "post_id": 2
+        }
+    },
+    {
+        "model": "rareapi.postreaction",
+        "pk": 6,
+        "fields": {
+            "user_id": 1,
+            "reaction_id": 1,
+            "post_id": 3
+        }
+    }
+]
