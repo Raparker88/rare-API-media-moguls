@@ -4,7 +4,7 @@
         "pk": 1,
         "fields": {
             "label": "love",
-            "image_url": "/media/emojis/Heart_Eyes_Emoji.png"
+            "image_url": "/emojis/Heart_Eyes_Emoji.png"
         }
     },
     {
@@ -12,7 +12,7 @@
         "pk": 2,
         "fields": {
             "label": "nerd",
-            "image_url": "/media/emojis/Nerd_Emoji_With_Glasses.png"
+            "image_url": "/emojis/Nerd_Emoji_With_Glasses.png"
         }
     },
     {
@@ -20,7 +20,7 @@
         "pk": 3,
         "fields": {
             "label": "poop",
-            "image_url": "/media/emojis/Poop_Emoji.png"
+            "image_url": "/emojis/Poop_Emoji.png"
         }
     }
 ]
