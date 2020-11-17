@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework import serializers
 from rest_framework import status
 from rareapi.models import Subscription, RareUser
+from rest_framework.decorators import action
 
 class Subscriptions(ViewSet):
     """Rare subscriptions"""
@@ -48,6 +49,17 @@ class Subscriptions(ViewSet):
         else:
             return Response({"reason": "user cannot subscribe to their own posts"}, status=status.HTTP_400_BAD_REQUEST)
 
+        @action(methods=['get'], detail=False)
+        def get_current_subscriptions(self, request):
+            follower = RareUser.objects.get(user=request.auth.user)
+
+            if follower is not None:
+                subscriptions = subscriptions.filter(follower_id=follower)
+                subscriptions = subscriptions.filter(ended_on__isnull=True)
+
+            serializer = SubscriptionSerializer(
+                subscriptions, many=True, context={'request': request})
+            return Response(serializer.data)
 class RareUserSerializer(serializers.ModelSerializer):
     """JSON serializer for subscription follower and author related Django user"""
     class Meta:
