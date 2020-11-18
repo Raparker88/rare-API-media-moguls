@@ -156,13 +156,14 @@ class Posts(ViewSet):
             post.publication_date = None
             post.save()
 
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
+            serializer = PostSerializer(post, context={'request': request})
+            return Response(serializer.data)
         else:
             post.publication_date = timezone.now().today()
             post.save()
 
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            serializer = PostSerializer(post, context={'request': request})
+            return Response(serializer.data)
 
 
 
