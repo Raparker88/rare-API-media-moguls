@@ -5,6 +5,7 @@ from rest_framework import serializers
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.utils import timezone
 from rareapi.models import Post, RareUser, Category, PostTag
 from rareapi.views.category import CategorySerializer
 
@@ -145,6 +146,27 @@ class Posts(ViewSet):
                 post.save()
 
                 return Response({}, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(methods=['patch'], detail=True)
+    def publish(self, request, pk=None):
+        """Manages users publishing and unpublishing posts"""
+
+        post = Post.objects.get(pk=pk)
+        if post.publication_date is not None:
+            post.publication_date = None
+            post.save()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+        else:
+            post.publication_date = timezone.now().today()
+            post.save()
+
+            return Response({}, status=status.HTTP_204_NO_CONTENT)
+
+
+
+
 
 """Serializer for RareUser Info in a post"""
 class PostRareUserSerializer(serializers.ModelSerializer):
