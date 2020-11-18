@@ -54,6 +54,10 @@ class Posts(ViewSet):
         if rareuser_id is not None:
             posts = posts.filter(rareuser_id=rareuser_id)
 
+        category_id = self.request.query_params.get('category_id', None)
+        if category_id is not None:
+            posts = posts.filter(category_id = category_id)
+        
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -99,6 +103,7 @@ class Posts(ViewSet):
 
             posttag = PostTag()
             posttag.tag_id = int(tag["id"])
+            
             posttag.post_id = int(serializer.data["id"])
 
             posttag.save()
