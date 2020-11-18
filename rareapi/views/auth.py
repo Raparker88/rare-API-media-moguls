@@ -1,6 +1,7 @@
 """View module for handling authentication and new user registration"""
 import json
 import datetime
+import uuid
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
@@ -57,11 +58,15 @@ def register_user(request):
         is_active=True,
         is_staff=False
     )
+    format, imgstr = req_body["profile_image"].split(';base64,')
+    ext = format.split('/')[-1]
+    data = ContentFile(base64.b64decode(imgstr), name=f'{req_body["email"]}-{uuid.uuid4()}.{ext}')
+
     #rare_user has a property `user` which makes all `user` properties accessible through the rare_user
     rare_user = RareUser.objects.create(
         bio=req_body['bio'],
-        profile_image_url=req_body['profile_image_url'],
-        user=new_user
+        user=new_user,
+        profile_image_url = data
     )
 
     # save it all to the db
