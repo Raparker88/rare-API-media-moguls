@@ -73,10 +73,7 @@ class Subscriptions(ViewSet):
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
     @action(methods=['get'], detail=False)
-    # Gets only active subscriptions (those without an ended_on) for the current user
-    # AND  a given author
-    # Used to indicate on author's profile page whether user has a current subscription to the author
-    # Will also be used on front end to make SURE sure before creating a subscription that an active one doesn't already exist
+    # Checks whether a user has an active subscription to a given author ID
     def get_single_current_subscription(self, request):
         subscriptions = Subscription.objects.all()
         follower = RareUser.objects.get(user=request.auth.user)
