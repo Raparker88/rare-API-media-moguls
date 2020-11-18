@@ -38,5 +38,15 @@
             "created_on": "2020-12-13T13:20:37+00:00",
             "ended_on": null
         }
+    },
+    {
+        "model": "rareapi.subscription",
+        "pk": 5,
+        "fields": {
+            "follower_id": 1,
+            "author_id": 3,
+            "created_on": "2020-10-13T13:23:37+00:00",
+            "ended_on": null
+        }
     }
 ]
