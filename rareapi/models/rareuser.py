@@ -5,7 +5,7 @@ from django.contrib.auth.models import User
 class RareUser(models.Model):
     """RareUser Model"""
     bio = models.CharField(max_length=500)
-    profile_image_url = models.ImageField(upload_to="images/", height_field=None, width_field=None, max_length=None)
+    profile_image_url = models.ImageField(upload_to="images/", blank='true', null='true')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
 
     """This makes the username property accessible directly from the RareUser"""

@@ -60,7 +60,7 @@ def register_user(request):
         is_active=True,
         is_staff=False
     )
-    format, imgstr = req_body["profile_image"].split(';base64,')
+    format, imgstr = req_body["profile_image_url"].split(';base64,')
     ext = format.split('/')[-1]
     data = ContentFile(base64.b64decode(imgstr), name=f'{req_body["email"]}-{uuid.uuid4()}.{ext}')
 
