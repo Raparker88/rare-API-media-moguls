@@ -33,12 +33,12 @@ class Posts(ViewSet):
         else:
             post.approved = False
         
+        if request.data["post_img"] is not None:
+            format, imgstr = request.data["post_img"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
 
-        format, imgstr = request.data["post_img"].split(';base64,')
-        ext = format.split('/')[-1]
-        data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
-
-        post.image_url = data
+            post.image_url = data
         
 
         try:
@@ -115,10 +115,12 @@ class Posts(ViewSet):
         category = Category.objects.get(pk=request.data["category_id"])
         post.category = category
 
-        format, imgstr = request.data["post_img"].split(';base64,')
-        ext = format.split('/')[-1]
-        data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
-        post.image_url = data
+        if request.data["post_img"] is not None:
+
+            format, imgstr = request.data["post_img"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
+            post.image_url = data
 
         post.save()
 
