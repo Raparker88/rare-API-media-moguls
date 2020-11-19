@@ -111,23 +111,20 @@ class Posts(ViewSet):
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
         post.content = request.data["content"]
-        post.selected_tags = request.data["selected_tags"]
         post.rareuser = rareuser
 
         category = Category.objects.get(pk=request.data["category_id"])
         post.category = category
+
+        format, imgstr = request.data["post_img"].split(';base64,')
+        ext = format.split('/')[-1]
+        data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
+        post.image_url = data
+
         post.save()
 
         serializer = PostSerializer(post, context={'request': request})
-            #iterate selected tags and save relationships to database
-        for tag in post.selected_tags:
-
-            posttag = PostTag()
-            posttag.tag_id = int(tag["id"])
-            
-            posttag.post_id = int(serializer.data["id"])
-
-            posttag.save()
+        
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
