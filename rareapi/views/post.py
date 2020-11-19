@@ -58,6 +58,15 @@ class Posts(ViewSet):
         category_id = self.request.query_params.get('category_id', None)
         if category_id is not None:
             posts = posts.filter(category_id = category_id)
+
+        for post in posts:
+
+            post.is_user_author = None
+            current_rareuser = RareUser.objects.get(user=request.auth.user)
+            if post.rareuser == current_rareuser:
+                post.is_user_author = True
+            else:
+                post.is_user_author=False
         
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
@@ -156,13 +165,14 @@ class Posts(ViewSet):
             post.publication_date = None
             post.save()
 
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
-
+            serializer = PostSerializer(post, context={'request': request})
+            return Response(serializer.data)
         else:
             post.publication_date = timezone.now().today()
             post.save()
 
-            return Response({}, status=status.HTTP_204_NO_CONTENT)
+            serializer = PostSerializer(post, context={'request': request})
+            return Response(serializer.data)
 
 
 
