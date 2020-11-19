@@ -2,10 +2,12 @@
 import json
 import datetime
 import uuid
+import base64
 from django.http import HttpResponse
 from django.contrib.auth import authenticate
 from django.contrib.auth.models import User
 from django.views.decorators.csrf import csrf_exempt
+from django.core.files.base import ContentFile
 from rest_framework import status
 from rest_framework.authtoken.models import Token
 from rareapi.models import RareUser
