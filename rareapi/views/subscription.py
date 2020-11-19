@@ -41,7 +41,10 @@ class Subscriptions(ViewSet):
         subscription.author = author
 
         if follower != author:
-            try: 
+            try:
+                found_subscription = Subscription.objects.get(follower=follower, author=author, ended_on=None) 
+                return Response({"reason": "user is already subscribed to that author"}, status=status.HTTP_400_BAD_REQUEST)
+            except Subscription.DoesNotExist:
                 subscription.save()
                 serializer = SubscriptionSerializer(subscription, context={'request': request})
                 return Response(serializer.data)
@@ -72,19 +75,18 @@ class Subscriptions(ViewSet):
         subscription_obj.save()
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
-    @action(methods=['get'], detail=False)
+    @action(methods=['get'], detail=True)
     # Checks whether a user has an active subscription to a given author ID
-    def get_single_current_subscription(self, request):
-        subscriptions = Subscription.objects.all()
+    def get_single_current_subscription(self, request, pk=None):
         follower = RareUser.objects.get(user=request.auth.user)
-        author = RareUser.objects.get(pk=request.data["author_id"])
-
-        if follower is not None:
-            subscriptions = subscriptions.filter(follower_id=follower, ended_on__isnull=True, author=author)
-
-        serializer = SubscriptionSerializer(
-            subscriptions, many=True, context={'request': request})
-        return Response(serializer.data)
+        author = RareUser.objects.get(pk=pk)
+        try:
+            subscription = Subscription.objects.get(follower=follower, author=author, ended_on=None)
+            serializer = SubscriptionSerializer(
+                subscription, many=False, context={'request': request})
+            return Response(serializer.data)
+        except Subscription.DoesNotExist:
+            return Response({"message": "subscription not found"})
 class RareUserSerializer(serializers.ModelSerializer):
     """JSON serializer for subscription follower and author related Django user"""
     class Meta:
