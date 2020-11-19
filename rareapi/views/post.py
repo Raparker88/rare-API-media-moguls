@@ -6,6 +6,9 @@ from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
 from django.utils import timezone
+import uuid
+import base64
+from django.core.files.base import ContentFile
 from rareapi.models import Post, RareUser, Category, PostTag
 from rareapi.views.category import CategorySerializer
 
@@ -22,7 +25,6 @@ class Posts(ViewSet):
         post.rareuser = rareuser
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
-        post.image_url = request.data["image_url"]
         post.content = request.data["content"]
         post.selected_tags = request.data["selected_tags"]
 
@@ -30,6 +32,14 @@ class Posts(ViewSet):
             post.approved = True
         else:
             post.approved = False
+        
+        if request.data["post_img"] is not None:
+            format, imgstr = request.data["post_img"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
+
+            post.image_url = data
+        
 
         try:
             post.save()
@@ -100,23 +110,22 @@ class Posts(ViewSet):
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
         post.content = request.data["content"]
-        post.selected_tags = request.data["selected_tags"]
         post.rareuser = rareuser
 
         category = Category.objects.get(pk=request.data["category_id"])
         post.category = category
+
+        if request.data["post_img"] is not None:
+
+            format, imgstr = request.data["post_img"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
+            post.image_url = data
+
         post.save()
 
         serializer = PostSerializer(post, context={'request': request})
-            #iterate selected tags and save relationships to database
-        for tag in post.selected_tags:
-
-            posttag = PostTag()
-            posttag.tag_id = int(tag["id"])
-            
-            posttag.post_id = int(serializer.data["id"])
-
-            posttag.save()
+        
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
@@ -190,5 +199,6 @@ class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=False)
     class Meta:
         model = Post
-        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category','category_id', 'approved', 'is_user_author')
+        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 
+        'image_url','category','category_id', 'approved', 'is_user_author')
         depth = 1
