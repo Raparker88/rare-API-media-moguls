@@ -25,7 +25,6 @@ class Posts(ViewSet):
         post.rareuser = rareuser
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
-        # post.image_url = request.data["image_url"]
         post.content = request.data["content"]
         post.selected_tags = request.data["selected_tags"]
 
