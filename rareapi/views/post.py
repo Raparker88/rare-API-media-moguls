@@ -5,6 +5,10 @@ from rest_framework import serializers
 from rest_framework import status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from django.utils import timezone
+import uuid
+import base64
+from django.core.files.base import ContentFile
 from rareapi.models import Post, RareUser, Category, PostTag
 from rareapi.views.category import CategorySerializer
 
@@ -21,7 +25,6 @@ class Posts(ViewSet):
         post.rareuser = rareuser
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
-        post.image_url = request.data["image_url"]
         post.content = request.data["content"]
         post.selected_tags = request.data["selected_tags"]
 
@@ -29,6 +32,14 @@ class Posts(ViewSet):
             post.approved = True
         else:
             post.approved = False
+        
+        if request.data["post_img"] is not None:
+            format, imgstr = request.data["post_img"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
+
+            post.image_url = data
+        
 
         try:
             post.save()
@@ -54,6 +65,19 @@ class Posts(ViewSet):
         if rareuser_id is not None:
             posts = posts.filter(rareuser_id=rareuser_id)
 
+        category_id = self.request.query_params.get('category_id', None)
+        if category_id is not None:
+            posts = posts.filter(category_id = category_id)
+
+        for post in posts:
+
+            post.is_user_author = None
+            current_rareuser = RareUser.objects.get(user=request.auth.user)
+            if post.rareuser == current_rareuser:
+                post.is_user_author = True
+            else:
+                post.is_user_author=False
+        
         serializer = PostSerializer(posts, many=True, context={'request': request})
         return Response(serializer.data)
 
@@ -86,22 +110,22 @@ class Posts(ViewSet):
         post.title = request.data["title"]
         post.publication_date = request.data["publication_date"]
         post.content = request.data["content"]
-        post.selected_tags = request.data["selected_tags"]
         post.rareuser = rareuser
 
         category = Category.objects.get(pk=request.data["category_id"])
         post.category = category
+
+        if request.data["post_img"] is not None:
+
+            format, imgstr = request.data["post_img"].split(';base64,')
+            ext = format.split('/')[-1]
+            data = ContentFile(base64.b64decode(imgstr), name=f'"post_image"-{uuid.uuid4()}.{ext}')
+            post.image_url = data
+
         post.save()
 
         serializer = PostSerializer(post, context={'request': request})
-            #iterate selected tags and save relationships to database
-        for tag in post.selected_tags:
-
-            posttag = PostTag()
-            posttag.tag_id = int(tag["id"])
-            posttag.post_id = int(serializer.data["id"])
-
-            posttag.save()
+        
 
         return Response({}, status=status.HTTP_204_NO_CONTENT)
 
@@ -140,6 +164,28 @@ class Posts(ViewSet):
                 post.save()
 
                 return Response({}, status=status.HTTP_204_NO_CONTENT)
+    
+    @action(methods=['patch'], detail=True)
+    def publish(self, request, pk=None):
+        """Manages users publishing and unpublishing posts"""
+
+        post = Post.objects.get(pk=pk)
+        if post.publication_date is not None:
+            post.publication_date = None
+            post.save()
+
+            serializer = PostSerializer(post, context={'request': request})
+            return Response(serializer.data)
+        else:
+            post.publication_date = timezone.now().today()
+            post.save()
+
+            serializer = PostSerializer(post, context={'request': request})
+            return Response(serializer.data)
+
+
+
+
 
 """Serializer for RareUser Info in a post"""
 class PostRareUserSerializer(serializers.ModelSerializer):
@@ -153,5 +199,6 @@ class PostSerializer(serializers.ModelSerializer):
     category = CategorySerializer(many=False)
     class Meta:
         model = Post
-        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 'category','category_id', 'approved', 'is_user_author')
+        fields = ('id', 'title', 'publication_date', 'content', 'rareuser', 
+        'image_url','category','category_id', 'approved', 'is_user_author')
         depth = 1
